@@ -9,6 +9,7 @@ const Weather_comp = () => {
     const [city, setCity] = useState("London");
     const [weatherData, setWeatherData] = useState(null);
     const [error, setError] = useState(null);
+    const [currentDate, setCurrentDate] = useState("");
 
     const API_KEY = "48f005818bac6df89806450351e767c1";
 
@@ -35,6 +36,12 @@ const Weather_comp = () => {
 
     useEffect(() => {
         fetchWeatherData();
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.toLocaleString('default', { month: 'short' }); // Gets short month name
+        const year = date.getFullYear();
+        setCurrentDate(`${day} ${month}, ${year}`);
+
     }, []);
 
     const handleInputChange = (event) => {
@@ -55,6 +62,10 @@ const Weather_comp = () => {
                     value={city}
                 />
                 <input type="button" className="but" value="GET" onClick={handleSubmit}/>
+            </div>
+
+            <div className="date">
+                    <p>{currentDate}</p> 
             </div>
 
             {weatherData ? (

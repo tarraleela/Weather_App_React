@@ -41,6 +41,11 @@
     color: aliceblue;
 }
 
+.weather > .date{
+    color:white;
+    font-size: 10px;
+}
+
 .weather > .weather-Icon{
     width:220px;
     display:flex;
