@@ -8,17 +8,26 @@ import wind from '../assets/wind-icon.jpg';
 const Weather_comp = () => {
     const [city, setCity] = useState("London");
     const [weatherData, setWeatherData] = useState(null);
+    const [error, setError] = useState(null);
 
     const API_KEY = "48f005818bac6df89806450351e767c1";
 
     const fetchWeatherData = async () => {
+        setWeatherData(null); 
         try {
             const response = await fetch(
                 `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
             );
             const data = await response.json();
-            console.log(data);
-            setWeatherData(data);
+
+            if (data.cod === "404") {
+                alert("City not found. Please check the name and try again.");
+                window.location.reload(); 
+                setWeatherData(null); 
+            } else {
+                setWeatherData(data); 
+            }
+
         } catch (error) {
             console.error("Error fetching weather data:", error);
         }
@@ -33,7 +42,6 @@ const Weather_comp = () => {
     };
 
     const handleSubmit = (event) => {
-        event.preventDefault();
         fetchWeatherData();
     };
 
@@ -74,7 +82,7 @@ const Weather_comp = () => {
                     </div>
                 </>
             ) : (
-                <p>Loading...</p>
+                <p>{error || "Loading..."}</p>
             )}
         </div>
     );
