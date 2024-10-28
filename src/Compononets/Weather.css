@@ -42,12 +42,14 @@
 }
 
 .weather > .date{
-    color:white;
-    font-size: 10px;
+    color:aliceblue;
+    font-size: 22px;
+    font-weight: 850;
+    margin-top:20px;
 }
 
 .weather > .weather-Icon{
-    width:220px;
+    width:170px;
     display:flex;
     flex-direction: column;
 }

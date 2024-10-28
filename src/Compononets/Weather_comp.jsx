@@ -1,6 +1,5 @@
-import './Weather.css';
 import React, { useEffect, useState } from 'react';
-import searchIcon from '../assets/search_Icon.jpg';
+import './Weather.css';
 import suncloud from '../assets/sun_cloud.webp';
 import humidity from '../assets/humidity-icon.png';
 import wind from '../assets/wind-icon.jpg';
@@ -13,59 +12,61 @@ const Weather_comp = () => {
 
     const API_KEY = "48f005818bac6df89806450351e767c1";
 
-    const fetchWeatherData = async () => {
-        setWeatherData(null); 
+    const fetchWeatherData = async (cityName) => {
         try {
             const response = await fetch(
-                `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
+                `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}`
             );
             const data = await response.json();
 
             if (data.cod === "404") {
-                alert("City not found. Please check the name and try again.");
-                window.location.reload(); 
-                setWeatherData(null); 
+                alert("City not found. \n Please check the name and try again.");
+                setCity("London"); 
+                fetchWeatherData("London"); 
             } else {
-                setWeatherData(data); 
+                setWeatherData(data);
+                setError(null); 
             }
-
         } catch (error) {
-            console.error("Error fetching weather Data:", error);
+            alert("Error fetching weather data."); 
         }
     };
 
     useEffect(() => {
-        fetchWeatherData();
+        fetchWeatherData(city);
         const date = new Date();
         const day = date.getDate();
-        const month = date.toLocaleString('default', { month: 'short' }); // Gets short month name
+        const month = date.toLocaleString('default', { month: 'short' });
         const year = date.getFullYear();
         setCurrentDate(`${day} ${month}, ${year}`);
-
-    }, []);
+    }, []); 
 
     const handleInputChange = (event) => {
-        setCity(event.target.value);
+        setCity(event.target.value); 
     };
 
     const handleSubmit = (event) => {
-        fetchWeatherData();
-    };
+        event.preventDefault(); 
+        fetchWeatherData(city); 
+    }
 
     return (
         <div className="weather">
-            <div className="search-bar">
-                <input 
-                    type="text" 
-                    placeholder="Search city" 
-                    onChange={handleInputChange} 
-                    value={city}
-                />
-                <input type="button" className="but" value="GET" onClick={handleSubmit}/>
-            </div>
+
+            <form onSubmit={handleSubmit}>
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        placeholder="Search city"
+                        onChange={handleInputChange}
+                        value={city}
+                    />
+                    <input type="submit" className="but" value="GET" />
+                </div>
+            </form>
 
             <div className="date">
-                    <p>{currentDate}</p> 
+                <p>{currentDate}</p>
             </div>
 
             {weatherData ? (
@@ -93,7 +94,7 @@ const Weather_comp = () => {
                     </div>
                 </>
             ) : (
-                <p>{error || "Loading..."}</p>
+                <p>{error || ""}</p> 
             )}
         </div>
     );
