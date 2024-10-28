@@ -29,7 +29,7 @@ const Weather_comp = () => {
             }
 
         } catch (error) {
-            console.error("Error fetching weather data:", error);
+            console.error("Error fetching weather Data:", error);
         }
     };
 
